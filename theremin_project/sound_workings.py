@@ -23,7 +23,7 @@ def add_note(out, instr, key_num, duration, bpm, volume):
 sampling_rate = 44100.0
 Wavefile.setDefaults(sampling_rate, 16)
 
-bass = OrganPipe(sampling_rate)	# use a guitar bass as the instrument
+organ = OrganPipe(sampling_rate)	# use an organ as the instrument
 solo = AudioStream(sampling_rate, 1)
 
 """ these are the piano key numbers for a 3 octave blues scale in A
@@ -32,17 +32,6 @@ blues_scale = [25, 28, 30, 31, 32, 35, 37, 40, 42, 43, 44, 47, 49, 52, 54, 55, 5
 beats_per_minute = 45				# Let's make a slow blues solo
 
 curr_note = 0
-# add_note(solo, bass, blues_scale[curr_note], 1.0, beats_per_minute, 1.0)
-
-licks = [[[-1,.15],[1,.35], [1, .4],[1,.6],[1,.5]], [[-1,.15],[1,.85],[-1,.4],[-1,.6]], [[-1,.23],[0,.43], [1, .24],[1,.6],[1,.5]], [[1,.5], [1, .5]]] #, [1,.5], [1,.5], [1,.5], [1,.5], [1,.5], [1,.5], [1,.5], [1,.5], [1,.5], [1,.5]]]
-for i in range(0, 1):
-    lick = licks[3] #choice(licks)
-    for note in lick:
-        curr_note += note[0]
-        if curr_note < 0:
-            curr_note = 0
-        elif curr_note > len(blues_scale)-1:
-            cur_note = len(blues_scale)-1
-        add_note(solo, bass,blues_scale[curr_note], note[1], beats_per_minute, 1)
+add_note(solo, organ ,blues_scale[curr_note], note[1], beats_per_minute, 1)
 
 solo >> "blues_solo.wav"
