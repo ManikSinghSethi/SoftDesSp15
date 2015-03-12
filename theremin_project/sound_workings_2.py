@@ -1,7 +1,6 @@
 """ Synthesizes a blues solo algorithmically """
 
 import numpy as np
-import time
 import pygame
 pygame.init()
 
@@ -10,7 +9,6 @@ pygame.init()
 
 import cv2
 import numpy as np
-import imghdr
 
 #general functions
 def avg(lis):
@@ -47,7 +45,7 @@ class Ball(object):
             with only black and the desired color
         """
         HSV = cv2.COLOR_BGR2HSV
-        kernel = np.ones((21, 21), 'uint8')
+        kernel = np.ones((15, 15), 'uint8')
 
         gray_image = cv2.cvtColor(self.frame, cv2.COLOR_BGR2GRAY, 3)
 
@@ -55,6 +53,7 @@ class Ball(object):
         inRange_pic = cv2.inRange(hsv_pic, self.min_color, self.max_color)
         eroded_pic = cv2.erode(inRange_pic, kernel)
         dilated_pic = cv2.dilate(eroded_pic, kernel)
+        
 
         #res_pic = self.frame - res_pic
         blured_pic = cv2.medianBlur(dilated_pic,5)
@@ -128,12 +127,9 @@ class Note(object):
 
 if __name__ == "__main__":
     #purple
-    min_HSV_color = (90, 50, 50)
-    max_HSV_color = (140, 255, 255)
+    min_HSV_color = (100, 0, 0)
+    max_HSV_color = (150, 255, 255)
 
-    #red
-    #min_HSV_color = (0, 50, 50)
-    #max_HSV_color = (30, 255, 255)
 
     ball = Ball(min_HSV_color, max_HSV_color)
     note = Note()
@@ -154,15 +150,3 @@ if __name__ == "__main__":
     #release Capture
     ball.cap.release()
     cv2.destroyAllWindows()
-
-#playanote(6, 2)
-#playanote(2, 1)
-#playanote(3, 1)
-# playanote(6, 2)
-# playanote(2, 1)
-# playanote(3, 1)
-# playanote(6, 2)
-# playanote(2, 1)
-# playanote(3, 1)
-# playanote(6, 2)
-# playanote(2, 1)
