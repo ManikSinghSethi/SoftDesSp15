@@ -23,7 +23,7 @@ def get_word_list(file_name):
 	lines = [line.strip() for line in lines]
 	lines = " ".join(lines)
 	lines = "".join([c for c in lines if c.isalpha() or c == " "]) #remove anything but alphabet and space
-	words = lines.split()
+	words = lines.lower().split()
 	return words
 
 def get_top_n_words(word_list, n):
