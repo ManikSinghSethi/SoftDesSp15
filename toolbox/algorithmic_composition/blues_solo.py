@@ -34,9 +34,9 @@ beats_per_minute = 45				# Let's make a slow blues solo
 curr_note = 0
 # add_note(solo, bass, blues_scale[curr_note], 1.0, beats_per_minute, 1.0)
 
-licks = [[[-1,.15],[1,.35], [1, .4],[1,.6],[1,.5]], [[-1,.15],[1,.85],[-1,.4],[-1,.6]], [[-1,.23],[0,.43], [1, .24],[1,.6],[1,.5]], [[2,.3], [3, .8], [-4, .35], [-2,.55]]]
+licks = [[[-1,.15],[1,.35], [1, .4],[1,.6],[1,.5]], [[-1,.15],[1,.85],[-1,.4],[-1,.6]], [[-1,.23],[0,.43], [1, .24],[1,.6],[1,.5]], [[2,.3], [3, .8], [-4, .35], [-2,.55]]] #added extra notes, some with funky time durations
 for i in range(0, 4):
-    lick = choice(licks) #choice(licks)
+    lick = choice(licks) #randomly select lick
     for note in lick:
         curr_note += note[0]
         if curr_note < 0:

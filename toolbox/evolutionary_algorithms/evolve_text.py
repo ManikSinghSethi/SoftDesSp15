@@ -44,6 +44,7 @@ class FitnessMinimizeSingle(base.Fitness):
     weights = (-1.0, )
 
 
+
 class Message(list):
     """
     Representation of an individual Message within the population to be evolved
@@ -54,7 +55,6 @@ class Message(list):
     def __init__(self, starting_string=None, min_length=4, max_length=30):
         """
         Create a new Message individual.
-
         If starting_string is given, initialize the Message with the
         provided string message. Otherwise, initialize to a random string
         message with length between min_length and max_length.
@@ -88,12 +88,23 @@ class Message(list):
         return "".join(self)
 
 
-#-----------------------------------------------------------------------------
-# Genetic operators
-#-----------------------------------------------------------------------------
+def levenshtein_distance(s1,s2, levendict={}):
+    """ Computes the Levenshtein distance between two input strings """
 
-# TODO: Implement levenshtein_distance function (see Day 9 in-class exercises)
-# HINT: Now would be a great time to implement memoization if you haven't
+    if len(s1) == 0:
+            return len(s2)
+    if len(s2) == 0:
+            return len(s1)
+    combos = [  (s1[1:], s2[1:]),   (s1[1:], s2),   (s1, s2[1:])  ]
+    calculated = []
+    for pair in combos:
+        if pair in levendict:
+            calculated.append(levendict[pair])
+        else:
+            levendict[pair] = levenshtein_distance(pair[0], pair[1], levendict)
+            calculated.append(levendict[pair])
+    #print(calculated)
+    return min([int(s1[0] != s2[0]) + calculated[0], 1+calculated[1], 1+calculated[2]])
 
 def evaluate_text(message, goal_text, verbose=VERBOSE):
     """
@@ -121,13 +132,19 @@ def mutate_text(message, prob_ins=0.05, prob_del=0.05, prob_sub=0.05):
     """
 
     if random.random() < prob_ins:
-        # TODO: Implement insertion-type mutation
+        rchar = random.choice(VALID_CHARS)
+        i = random.randint(0, len(message)-1)
+        message.insert(i, rchar)
         pass
 
-    # TODO: Also implement deletion and substitution mutations
-    # HINT: Message objects inherit from list, so they also inherit
-    #       useful list methods
-    # HINT: You probably want to use the VALID_CHARS global variable
+    if random.random() < prob_del:
+        i = random.randint(0, len(message)-1)
+        message.pop(i)
+
+    if random.random() < prob_sub:
+        rchar = random.choice(VALID_CHARS)
+        i = random.randint(0, len(message)-1)
+        message[i] = rchar
 
     return (message, )   # Length 1 tuple, required by DEAP
 
@@ -184,8 +201,8 @@ def evolve_string(text):
     pop, log = algorithms.eaSimple(pop,
                                    toolbox,
                                    cxpb=0.5,    # Prob. of crossover (mating)
-                                   mutpb=0.2,   # Probability of mutation
-                                   ngen=500,    # Num. of generations to run
+                                   mutpb=0.3,   # Probability of mutation
+                                   ngen=600,    # Num. of generations to run
                                    stats=stats)
 
     return pop, log
